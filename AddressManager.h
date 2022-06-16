@@ -28,14 +28,10 @@ class AddressManager
 public:
 	std::vector<AddressInfo>AddressInfoVector;
 	
-	void AddItem(char *IP);
-	
-	void DelItem(char *IP);
-	void SetUDPForwardPort(int port);
+	void AddItem(char *IP, u_short port);
+	void DelItem(char *IP, u_short port);
 
 	
 private:
-	int FindIP(char *IP);
-	int UDPForwardPort;
-	
+	int FindIP(char *IP, u_short port);
 };

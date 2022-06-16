@@ -58,7 +58,6 @@ int main(int argc, char *argv[])
 	//fprintf(stderr, "\n");
 	StopSenderThread = 0;
 	AddressManager addressManager;
-	addressManager.SetUDPForwardPort(PORTOUT);
 	//addressManager.AddItem("192.168.2.20");
 	//addressManager.AddItem("192.168.2.15");
 	
@@ -87,9 +86,25 @@ int main(int argc, char *argv[])
 				char *TempCommand = new char[3]();
 				memcpy(TempCommand, &CommandBuffer[0], 3);
 				
-				char *TempIP = new char[CommandReceiveLen - 4]();
-				memcpy(TempIP, &CommandBuffer[4], CommandReceiveLen - 4);
-				
+				u_short port = PORTOUT;
+				int column_index = 3;
+				for(column_index=4; column_index<CommandReceiveLen; column_index++)
+				{
+					if (CommandBuffer[column_index] == ':')
+					{
+						char *TempPort = new char[CommandReceiveLen - column_index - 1]();
+						memcpy(TempPort, &CommandBuffer[column_index+1], CommandReceiveLen - column_index - 1);
+						port = atoi(TempPort); 
+						break;
+					}
+				}
+
+				char *TempIP = new char[column_index - 4]();
+				memcpy(TempIP, &CommandBuffer[4], column_index - 4);
+
+				fprintf(stderr, "IP is %s", TempIP);					
+				fprintf(stderr, "Port is %d", port);
+
 				
 				if (strncmp(TempCommand, "add", 3) == 0)
 				{
@@ -98,7 +113,7 @@ int main(int argc, char *argv[])
 					StopSenderThread = 0;
 					
 						
-					addressManager.AddItem(TempIP);
+					addressManager.AddItem(TempIP , port);
 					pthread_create(&hSenderThread, NULL, StartSenderThread, (void *)&addressManager); 
 					
 					
@@ -110,7 +125,7 @@ int main(int argc, char *argv[])
 					pthread_join(hSenderThread, NULL);
 					StopSenderThread = 0;
 						
-					addressManager.DelItem(TempIP);
+					addressManager.DelItem(TempIP, port);
 					pthread_create(&hSenderThread, NULL, StartSenderThread, (void *)&addressManager); 
 				}
 				
