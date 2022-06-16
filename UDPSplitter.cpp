@@ -102,8 +102,8 @@ int main(int argc, char *argv[])
 				char *TempIP = new char[column_index - 4]();
 				memcpy(TempIP, &CommandBuffer[4], column_index - 4);
 
-				fprintf(stderr, "IP is %s", TempIP);					
-				fprintf(stderr, "Port is %d", port);
+				//fprintf(stderr, "IP is %s", TempIP);					
+				//fprintf(stderr, "Port is %d", port);
 
 				
 				if (strncmp(TempCommand, "add", 3) == 0)
