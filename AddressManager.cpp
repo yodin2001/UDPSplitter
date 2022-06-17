@@ -28,7 +28,7 @@ void AddressManager::AddItem(char *IP, u_short port)
 			
 		if ((tmp.Socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1)
 		{
-			fprintf(stderr, "Failed to create socket");
+			fprintf(stderr, "Failed to create socket\n");
 			//exit(1);
 		}
 			
@@ -49,7 +49,7 @@ void AddressManager::AddItem(char *IP, u_short port)
 	}
 	else
 	{
-		fprintf(stderr, "Address exists. No need to add second time.");
+		fprintf(stderr, "Address exists. No need to add second time.\n");
 	}
 	
 }
@@ -64,7 +64,7 @@ void AddressManager::DelItem(char *IP, u_short port)
 	}
 	else
 	{
-		fprintf(stderr, "Address not exists. No need to remove it.");
+		fprintf(stderr, "Address not exists. No need to remove it.\n");
 	}
 	
 }

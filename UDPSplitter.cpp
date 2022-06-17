@@ -67,11 +67,12 @@ int main(int argc, char *argv[])
 		exit(1);
 	
 	//std::thread t(StartSenderThread, &addressManager);
-	pthread_t hSenderThread = NULL;  
+	pthread_t hSenderThread = 0;  
 	pthread_create(&hSenderThread, NULL, StartSenderThread, (void *)&addressManager); 
 
 	
 	char CommandBuffer[40];
+	memset(&CommandBuffer, 0, sizeof(CommandBuffer));
 	int CommandReceiveLen = 0;
 	while (1)
 	{
@@ -81,7 +82,7 @@ int main(int argc, char *argv[])
 			if (CommandReceiveLen > 10)
 			{
 				
-				fprintf(stderr, "Received message: %s", CommandBuffer);
+				fprintf(stderr, "Received message: %s\n", CommandBuffer);
 				
 				char *TempCommand = new char[3]();
 				memcpy(TempCommand, &CommandBuffer[0], 3);
@@ -153,7 +154,7 @@ int main(int argc, char *argv[])
 }
 
 
-void *StartSenderThread(void *arg) 
+void * StartSenderThread(void *arg) 
 {
 	AddressManager *addressManager = (AddressManager *)arg;
 	socklen_t  recv_len;
@@ -180,7 +181,7 @@ void *StartSenderThread(void *arg)
 					(struct sockaddr *) &addressManager->AddressInfoVector[i].si_DestInfo,
 					addressManager->AddressInfoVector[i].si_len) == -1)
 				{
-					fprintf(stderr, "sendto() error");
+					fprintf(stderr, "sendto() error\n");
 					exit(1);
 				}
 			}
@@ -188,7 +189,7 @@ void *StartSenderThread(void *arg)
 		}
 		
 	}
-	
+	return 0;
 }
 
 int InitVideoReceiverSocket()
